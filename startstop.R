@@ -2,6 +2,12 @@ library(tidyverse)
 library(lubridate)
 library(data.table)
 library(testthat)
+library(glue)
+
+folder <- 
+  ifelse(Sys.info()['sysname'] == 'Darwin'
+        , '/Users/ryandickerson/Documents/GitHub/IFM_Study'
+        , '/home/john/Documents/IFM')
 
 plot.dur <- function(df){
   library(RColorBrewer)  
@@ -35,7 +41,7 @@ plot.dur <- function(df){
 }
 
 startstop <- function(chapter, section, action){
-  file.loc <- '/home/john/Documents/IFM/study_record.rds'
+  file.loc <- glue('{folder}/study_record.rds')
   old <- read_rds(file.loc)
   print(old)
   expect_false(
@@ -78,4 +84,4 @@ startstop(
          else .}
 )
 
-plot.dur(read_rds('/home/john/Documents/IFM/study_record.rds'))
+plot.dur(read_rds(glue('{folder}/study_record.rds')))
