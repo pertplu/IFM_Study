@@ -15,11 +15,12 @@ plot.dur <- function(df){
   cols <- brewer.pal(3, 'Dark2')
   to.plot <-   
     df[, .(Date = as.Date(dt.time[.N]),
-         dur     = as.numeric(difftime(dt.time[.N], dt.time[1], unit = 'hour')))
+           dur  = as.numeric(difftime(dt.time[.N], dt.time[1], unit = 'hour')))
        , .(g = (action =='stop') %>% {cumsum(.) - .})] %>%
       .[dur > 0.01] %>% 
       .[, .(dur = sum(dur)), Date] %>% 
-      .[data.table(Date = seq.Date(Date[1], Date[.N], 'day'), dur = 0), on = 'Date'
+      .[data.table(Date = seq.Date(Date[1], Date[.N], 'day'), dur = 0)
+        , on = 'Date'
         , .(Date, dur = coalesce(dur, i.dur))] %>% 
       .[, cum.dur := cumsum(dur)] %>%
       .[, mean.dur := cum.dur/seq(.N)] 
